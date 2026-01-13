@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro de Clientes - MVP</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script>
+      (function guard() {
+        const s =
+          sessionStorage.getItem("session_user") ||
+          localStorage.getItem("session_user");
+        if (!s) window.location.href = "login.html";
+      })();
+    </script>
+  </head>
+  <body>
+    <header>
+      <h1>Cadastro de Clientes</h1>
+      <button
+        onclick="(localStorage.removeItem('session_user'), sessionStorage.removeItem('session_user'), window.location.href='login.html')"
+      >
+        Sair
+      </button>
+    </header>
+
+    <section class="card">
+      <h2>Novo / Editar Cliente</h2>
+      <form id="formCliente">
+        <input type="hidden" id="id" />
+        <div class="grid">
+          <label
+            >Nome*
+            <input id="nome" type="text" placeholder="Maria Silva" required
+          /></label>
+          <label
+            >E-mail*
+            <input
+              id="email"
+              type="email"
+              placeholder="maria@exemplo.com"
+              required
+          /></label>
+          <label
+            >Celular*
+            <input
+              id="celular"
+              type="text"
+              placeholder="(82) 99999-9999"
+              required
+          /></label>
+        </div>
+        <label
+          >Observações
+          <textarea id="obs" rows="2" placeholder="Notas rápidas..."></textarea>
+        </label>
+
+        <div class="actions">
+          <button type="submit" id="btnSalvar">Salvar</button>
+          <button type="button" id="btnLimpar" class="secondary">Limpar</button>
+        </div>
+        <p id="msg" class="msg"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Clientes</h2>
+      <div class="toolbar">
+        <input
+          id="busca"
+          type="search"
+          placeholder="Buscar por nome ou email..."
+        />
+      </div>
+      <table id="tabela">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Celular</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- linhas geradas via JS -->
+        </tbody>
+      </table>
+    </section>
+
+    <footer>
+      <small>MVP – Projeto Integrador (UC1)</small>
+    </footer>
+    <script src="app.js"></script>
+  </body>
+</html>

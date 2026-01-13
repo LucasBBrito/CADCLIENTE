@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login - CadClientes</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <main class="container">
+      <section class="card">
+        <header class="header">
+          <h1>Entrar</h1>
+          <p>Acesse o sistema de cadastro de clientes</p>
+        </header>
+
+        <form id="formLogin" novalidate>
+          <label for="email">E-mail</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            inputmode="email"
+            autocomplete="username"
+            placeholder="voce@empresa.com"
+            required
+          />
+
+          <label for="senha">Senha</label>
+          <div class="password-field">
+            <input
+              id="senha"
+              name="senha"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Sua senha"
+              minlength="6"
+              required
+            />
+            <button
+              type="button"
+              id="toggleSenha"
+              aria-label="Mostrar/ocultar senha"
+            >
+              👁️
+            </button>
+          </div>
+
+          <div class="row">
+            <label class="remember">
+              <input id="lembrar" type="checkbox" /> Manter-me conectado
+            </label>
+            <a
+              class="help"
+              href="#"
+              id="preencherExemplo"
+              title="Preencher credenciais de exemplo"
+              >Usar exemplo</a
+            >
+          </div>
+
+          <button id="btnEntrar" type="submit">Entrar</button>
+          <p id="msg" class="msg" role="alert" aria-live="polite"></p>
+        </form>
+
+        <footer class="footer">
+          <small>MVP • Projeto Integrador (UC1)</small>
+        </footer>
+      </section>
+    </main>
+
+    <script src="login.js"></script>
+  </body>
+</html>

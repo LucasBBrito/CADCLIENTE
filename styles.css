@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  font-family: system-ui, Arial, sans-serif;
+  margin: 0;
+  background: #f6f8fb;
+  color: #222;
+}
+header,
+footer {
+  background: #0b5ed7;
+  color: #fff;
+  padding: 16px;
+  text-align: center;
+}
+h1,
+h2 {
+  margin: 0 0 12px 0;
+}
+.card {
+  background: #fff;
+  margin: 16px auto;
+  padding: 16px;
+  border-radius: 12px;
+  max-width: 980px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 12px;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+}
+input,
+textarea {
+  padding: 10px;
+  border: 1px solid #dfe3e8;
+  border-radius: 8px;
+}
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+button {
+  background: #0b5ed7;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+button.secondary {
+  background: #6c757d;
+}
+button.small {
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 13px;
+}
+button.warning {
+  background: #dc3545;
+}
+.msg {
+  min-height: 18px;
+  margin-top: 8px;
+  font-size: 13px;
+}
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 8px;
+}
+.toolbar input {
+  max-width: 320px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+tbody tr:hover {
+  background: #fafbfd;
+}
+@media (max-width: 900px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
