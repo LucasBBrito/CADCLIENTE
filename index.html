@@ -15,13 +15,18 @@
   </head>
   <body>
     <header>
-      <h1>Cadastro de Clientes</h1>
+      <h1>
+        <img src="assets/logo-starcode-horizontal.png" alt="StarCode" class="logo-small">
+        Cadastro de Clientes
+      </h1>
       <button
         onclick="(localStorage.removeItem('session_user'), sessionStorage.removeItem('session_user'), window.location.href='login.html')"
       >
         Sair
       </button>
     </header>
+
+    <main>
 
     <section class="card">
       <h2>Novo / Editar Cliente</h2>
@@ -85,6 +90,8 @@
         </tbody>
       </table>
     </section>
+
+    </main>
 
     <footer>
       <small>MVP – Projeto Integrador (UC1)</small>

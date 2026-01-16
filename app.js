@@ -32,6 +32,21 @@ function salvarDB(clientes) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
 }
 
+// Inicializa com dados de exemplo se vazio
+function dbInicializar() {
+  const dados = localStorage.getItem(STORAGE_KEY);
+  if (!dados) {
+    const clientesExemplo = [
+      { id: gerarId(), nome: "Ana Pereira", email: "ana.pereira@exemplo.com", celular: "(11) 91111-1111", observacoes: "Cliente VIP", criadoEm: new Date().toISOString() },
+      { id: gerarId(), nome: "Carlos Oliveira", email: "carlos.o@exemplo.com", celular: "(21) 92222-2222", observacoes: "Prefere contato por e-mail", criadoEm: new Date().toISOString() },
+      { id: gerarId(), nome: "Fernanda Costa", email: "fernanda.c@exemplo.com", celular: "(31) 93333-3333", observacoes: "Interessada em novos produtos", criadoEm: new Date().toISOString() },
+      { id: gerarId(), nome: "João Silva", email: "joao.silva@exemplo.com", celular: "(41) 94444-4444", observacoes: "", criadoEm: new Date().toISOString() },
+      { id: gerarId(), nome: "Luciana Santos", email: "luciana.s@exemplo.com", celular: "(51) 95555-5555", observacoes: "Ligou semana passada", criadoEm: new Date().toISOString() }
+    ];
+    salvarDB(clientesExemplo);
+  }
+}
+
 // LISTAR (com busca opcional)
 function dbListar(q = "") {
   const clientes = carregarDB();
@@ -232,4 +247,5 @@ window.excluir = function (id) {
 };
 
 // ======================= INICIALIZAÇÃO =======================
+dbInicializar();
 carregarClientes();
