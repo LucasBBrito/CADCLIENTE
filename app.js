@@ -1,5 +1,5 @@
 // ======================= CONFIGURAÇÃO ==========================
-const API = "http://localhost:3001/api/clientes";
+const STORAGE_KEY = "cadclientes_db";
 
 // Referências aos elementos da página
 const form = document.getElementById("formCliente");
@@ -8,55 +8,91 @@ const campos = {
   id: document.getElementById("id"),
   nome: document.getElementById("nome"),
   email: document.getElementById("email"),
-  celular: document.getElementById("celular"), // se seu input chama telefone, já explico abaixo
+  celular: document.getElementById("celular"),
   obs: document.getElementById("obs"),
 };
 const busca = document.getElementById("busca");
 const tbody = document.querySelector("#tabela tbody");
 
-// ======================= FUNÇÕES DA API =======================
+// ======================= FUNÇÕES DE LOCALSTORAGE =======================
 
-// LISTAR
-async function apiListar(q = "") {
-  const url = q ? `${API}?q=${encodeURIComponent(q)}` : API;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Erro ao listar clientes");
-  return res.json();
+// Gera ID único
+function gerarId() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2);
+}
+
+// Carrega todos os clientes do localStorage
+function carregarDB() {
+  const dados = localStorage.getItem(STORAGE_KEY);
+  return dados ? JSON.parse(dados) : [];
+}
+
+// Salva todos os clientes no localStorage
+function salvarDB(clientes) {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(clientes));
+}
+
+// LISTAR (com busca opcional)
+function dbListar(q = "") {
+  const clientes = carregarDB();
+  if (!q) return clientes;
+
+  const termo = q.toLowerCase();
+  return clientes.filter(
+    (c) =>
+      c.nome.toLowerCase().includes(termo) ||
+      c.email.toLowerCase().includes(termo)
+  );
+}
+
+// BUSCAR POR ID
+function dbBuscarPorId(id) {
+  const clientes = carregarDB();
+  return clientes.find((c) => c.id === id);
 }
 
 // CRIAR
-async function apiCriar(dados) {
-  const res = await fetch(API, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dados),
-  });
-  const body = await res.json();
-  if (!res.ok) throw body;
-  return body;
+function dbCriar(dados) {
+  const clientes = carregarDB();
+  const novoCliente = {
+    id: gerarId(),
+    ...dados,
+    criadoEm: new Date().toISOString(),
+  };
+  clientes.push(novoCliente);
+  salvarDB(clientes);
+  return novoCliente;
 }
 
 // ATUALIZAR
-async function apiAtualizar(id, dados) {
-  const res = await fetch(`${API}/${id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(dados),
-  });
-  const body = await res.json();
-  if (!res.ok) throw body;
-  return body;
+function dbAtualizar(id, dados) {
+  const clientes = carregarDB();
+  const index = clientes.findIndex((c) => c.id === id);
+
+  if (index === -1) {
+    throw { erro: "Cliente não encontrado" };
+  }
+
+  clientes[index] = {
+    ...clientes[index],
+    ...dados,
+    atualizadoEm: new Date().toISOString(),
+  };
+
+  salvarDB(clientes);
+  return clientes[index];
 }
 
 // EXCLUIR
-async function apiExcluir(id) {
-  const res = await fetch(`${API}/${id}`, {
-    method: "DELETE",
-  });
-  if (!res.ok && res.status !== 204) {
-    const body = await res.json();
-    throw body;
+function dbExcluir(id) {
+  const clientes = carregarDB();
+  const novaLista = clientes.filter((c) => c.id !== id);
+
+  if (novaLista.length === clientes.length) {
+    throw { erro: "Cliente não encontrado" };
   }
+
+  salvarDB(novaLista);
 }
 
 // ======================= FUNÇÕES DE TELA =======================
@@ -73,6 +109,18 @@ function limparForm() {
 // Monta tabela
 function renderTabela(lista) {
   tbody.innerHTML = "";
+
+  if (lista.length === 0) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" style="text-align: center; color: #666; padding: 2rem;">
+          Nenhum cliente encontrado.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
   lista.forEach((c) => {
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -89,9 +137,9 @@ function renderTabela(lista) {
 }
 
 // Carrega lista + desenha tabela
-async function carregarClientes(q = "") {
+function carregarClientes(q = "") {
   try {
-    const lista = await apiListar(q);
+    const lista = dbListar(q);
     renderTabela(lista);
   } catch (e) {
     console.error(e);
@@ -102,7 +150,7 @@ async function carregarClientes(q = "") {
 // ======================= EVENTOS =======================
 
 // Submit do formulário (criar/atualizar)
-form.addEventListener("submit", async (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
   msg.textContent = "";
 
@@ -121,15 +169,15 @@ form.addEventListener("submit", async (e) => {
   try {
     if (campos.id.value) {
       // atualizar
-      await apiAtualizar(campos.id.value, dados);
+      dbAtualizar(campos.id.value, dados);
       msg.textContent = "Cliente atualizado com sucesso.";
     } else {
       // criar
-      await apiCriar(dados);
+      dbCriar(dados);
       msg.textContent = "Cliente criado com sucesso.";
     }
     limparForm();
-    await carregarClientes(busca.value.trim());
+    carregarClientes(busca.value.trim());
   } catch (e) {
     console.error(e);
     msg.textContent = e?.erro || "Erro ao salvar cliente.";
@@ -150,12 +198,14 @@ busca.addEventListener("input", () => {
 // ======================= AÇÕES DOS BOTÕES DA TABELA =======================
 
 // Tornar funções globais para usar no onclick do HTML
-window.editar = async function (id) {
+window.editar = function (id) {
   msg.textContent = "";
   try {
-    const res = await fetch(`${API}/${id}`);
-    if (!res.ok) throw await res.json();
-    const c = await res.json();
+    const c = dbBuscarPorId(id);
+    if (!c) {
+      msg.textContent = "Cliente não encontrado.";
+      return;
+    }
     campos.id.value = c.id;
     campos.nome.value = c.nome;
     campos.email.value = c.email;
@@ -168,13 +218,13 @@ window.editar = async function (id) {
   }
 };
 
-window.excluir = async function (id) {
+window.excluir = function (id) {
   if (!confirm("Tem certeza que deseja excluir este cliente?")) return;
   msg.textContent = "";
   try {
-    await apiExcluir(id);
+    dbExcluir(id);
     msg.textContent = "Cliente excluído.";
-    await carregarClientes(busca.value.trim());
+    carregarClientes(busca.value.trim());
   } catch (e) {
     console.error(e);
     msg.textContent = e?.erro || "Erro ao excluir cliente.";
@@ -183,5 +233,3 @@ window.excluir = async function (id) {
 
 // ======================= INICIALIZAÇÃO =======================
 carregarClientes();
-
-
