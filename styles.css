@@ -434,41 +434,43 @@ footer small {
 
 @media (max-width: 600px) {
   body {
-    font-size: 14px;
+    font-size: 16px; /* Increased from 14px */
   }
   
   main {
-    padding: 12px;
+    padding: 16px;
   }
   
   .card {
-    padding: 16px;
-    margin-bottom: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
   }
   
   h2 {
-    font-size: 18px;
+    font-size: 24px; /* Increased from 18px */
+    margin-bottom: 24px;
   }
   
   h2::before {
-    height: 20px;
+    height: 26px;
   }
   
   header {
-    padding: 12px;
+    padding: 16px;
   }
   
   header h1 {
-    font-size: 18px;
+    font-size: 22px; /* Increased from 18px */
   }
   
   header .logo-small {
-    height: 28px;
+    height: 36px;
   }
   
   header button {
     width: 100%;
-    padding: 10px 16px;
+    padding: 14px 20px;
+    font-size: 16px;
   }
   
   /* Transform table into stacked cards on mobile */
@@ -487,11 +489,11 @@ footer small {
   
   tbody tr {
     display: block;
-    margin-bottom: 16px;
+    margin-bottom: 24px; /* Increased spacing */
     background: #ffffff;
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px;
+    border-radius: 16px;
+    padding: 24px;
     box-shadow: var(--shadow-sm);
   }
   
@@ -501,10 +503,12 @@ footer small {
   }
   
   td {
-    display: block;
+    display: flex; /* Changed to flex for better alignment */
+    align-items: center;
     text-align: left;
-    padding: 8px 0;
+    padding: 12px 0;
     border: none;
+    font-size: 16px; /* Explicitly set larger font */
   }
   
   /* Add labels to each data cell */
@@ -513,7 +517,8 @@ footer small {
     font-weight: 700;
     color: var(--starcode-blue-dark);
     display: inline-block;
-    min-width: 80px;
+    min-width: 100px;
+    flex-shrink: 0;
   }
   
   td:nth-child(2)::before {
@@ -521,7 +526,8 @@ footer small {
     font-weight: 700;
     color: var(--starcode-blue-dark);
     display: inline-block;
-    min-width: 80px;
+    min-width: 100px;
+    flex-shrink: 0;
   }
   
   td:nth-child(3)::before {
@@ -529,12 +535,14 @@ footer small {
     font-weight: 700;
     color: var(--starcode-blue-dark);
     display: inline-block;
-    min-width: 80px;
+    min-width: 100px;
+    flex-shrink: 0;
   }
   
   td:nth-child(4) {
-    padding-top: 12px;
-    margin-top: 8px;
+    display: block;
+    padding-top: 20px;
+    margin-top: 12px;
     border-top: 1px solid var(--border);
   }
   
@@ -545,38 +553,42 @@ footer small {
   
   /* Action buttons in mobile cards */
   td button {
-    width: calc(50% - 4px);
-    margin: 0;
-    padding: 10px 16px;
-    font-size: 14px;
+    width: 100%; /* Full width for better touch targets */
+    margin: 0 0 12px 0 !important;
+    padding: 14px 20px;
+    font-size: 16px;
   }
   
-  td button:first-child {
-    margin-right: 8px;
+  td button:last-child {
+    margin-bottom: 0 !important;
   }
   
   /* Form improvements */
   input,
   textarea {
-    font-size: 16px; /* Prevents zoom on iOS */
+    font-size: 16px !important;
+    padding: 14px 16px;
   }
   
+  /* Fix small labels */
   label {
-    font-size: 13px;
+    font-size: 15px; /* Increased from 13px */
+    margin-bottom: 10px;
+    display: block;
   }
   
   .actions button {
-    padding: 14px 20px;
-    font-size: 15px;
+    padding: 16px 24px;
+    font-size: 18px; /* Larger action buttons */
   }
   
   /* Footer */
   footer {
-    padding: 16px 12px;
+    padding: 24px 16px;
   }
   
   footer small {
-    font-size: 12px;
+    font-size: 14px;
   }
 }
 
